@@ -14,13 +14,13 @@ export interface State {
   cachedKey: string | undefined;
 }
 
-export async function restore(cwd: string): Promise<State> {
+export async function restore(cwd: string, cacheKey: string): Promise<State> {
   const keyPrefix = `${process.platform}-golangci-`;
   const goSumPath = await getGoSumPath(cwd);
   core.info(`go.sum path is ${goSumPath}`);
 
   const hash = await hashFiles(goSumPath);
-  const key = keyPrefix + hash;
+  const key = keyPrefix + cacheKey + hash;
   const restoreKeys = [keyPrefix];
 
   let cachedKey: string | undefined = undefined;

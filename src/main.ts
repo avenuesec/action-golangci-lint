@@ -30,6 +30,7 @@ async function run(): Promise<void> {
     const workdir = core.getInput("workdir") || ".";
     const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
     const enableCache = core.getBooleanInput("cache");
+    const cacheKey = core.getInput("cacheKey");
 
     await core.group("Installing Go ...", async () => {
       await setupGo.run(goVersion, goVersionFile);
@@ -52,7 +53,7 @@ async function run(): Promise<void> {
     let cacheState: cache.State | undefined = undefined;
     if (enableCache) {
       cacheState = await core.group("Restoring cache ...", async () => {
-        return await cache.restore(cwd);
+        return await cache.restore(cwd, cacheKey);
       });
     }
 

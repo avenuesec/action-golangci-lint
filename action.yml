@@ -1,4 +1,4 @@
-name: "Run golangci-lint with reviewdog"
+name: "Run golangci-lint with reviewdog from vinnynordi"
 description: "🐶 Run golangci-lint with reviewdog on pull requests to improve code review experience."
 author: "haya14busa (reviewdog)"
 inputs:
@@ -59,6 +59,10 @@ inputs:
   cache:
     description: "enable cache"
     default: true
+    required: false
+  cacheKey:
+    description: "cache key"
+    default: ""
     required: false
 
 runs:
