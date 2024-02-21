@@ -1,4 +1,4 @@
-name: "Run golangci-lint with reviewdog from vinnynordi"
+name: "Run golangci-lint with reviewdog from avenue"
 description: "🐶 Run golangci-lint with reviewdog on pull requests to improve code review experience."
 author: "haya14busa (reviewdog)"
 inputs:
