@@ -86953,12 +86953,12 @@ const path = __importStar(__nccwpck_require__(1017));
 const stream = __importStar(__nccwpck_require__(2781));
 const util = __importStar(__nccwpck_require__(3837));
 const paths = ["~/.cache/golangci-lint", "~/.cache/go-build", "~/go/pkg"];
-async function restore(cwd) {
+async function restore(cwd, cacheKey) {
     const keyPrefix = `${process.platform}-golangci-`;
     const goSumPath = await getGoSumPath(cwd);
     core.info(`go.sum path is ${goSumPath}`);
     const hash = await hashFiles(goSumPath);
-    const key = keyPrefix + hash;
+    const key = keyPrefix + cacheKey + hash;
     const restoreKeys = [keyPrefix];
     let cachedKey = undefined;
     try {
@@ -87257,6 +87257,7 @@ async function run() {
         const workdir = core.getInput("workdir") || ".";
         const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
         const enableCache = core.getBooleanInput("cache");
+        const cacheKey = core.getInput("cacheKey");
         await core.group("Installing Go ...", async () => {
             await setupGo.run(goVersion, goVersionFile);
         });
@@ -87269,7 +87270,7 @@ async function run() {
         let cacheState = undefined;
         if (enableCache) {
             cacheState = await core.group("Restoring cache ...", async () => {
-                return await cache.restore(cwd);
+                return await cache.restore(cwd, cacheKey);
             });
         }
         const output = await core.group("Running golangci-lint ...", async () => {
